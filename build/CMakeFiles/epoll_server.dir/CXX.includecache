@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/listen.h
+sys/types.h
+-
+sys/socket.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+iostream
+-
+fcntl.h
+-
+stdio.h
+-
+unistd.h
+-
+sys/epoll.h
+-
+string
+-
+vector
+-
+map
+-
+
+/root/code/src/listen.cpp
+listen.h
+/root/code/src/listen.h
+
+/root/code/src/main.cpp
+listen.h
+/root/code/src/listen.h
+

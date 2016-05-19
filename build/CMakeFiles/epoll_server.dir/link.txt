@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/epoll_server.dir/src/main.cpp.o CMakeFiles/epoll_server.dir/src/listen.cpp.o  -o ../bin/epoll_server -rdynamic 
