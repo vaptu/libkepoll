@@ -1,5 +1,5 @@
-#include <iostream>
-using namespace std;
+//#include <iostream>
+//using namespace std;
 
 #include "listen.h"
 
@@ -13,6 +13,6 @@ class My : public Listen{
 };
 
 int main(){
-	My s;
-	s.Start();
+	My l;
+	l.Start();
 }
