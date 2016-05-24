@@ -15,7 +15,7 @@ class My : public Listen{
 		}
 };
 
-int main(){
+int main(){ 
 	My s;
 	s.Start();
 }
