@@ -1,6 +1,6 @@
 # libepoll
 libepoll使用epoll基础模型为基础。分离socket与epol具体逻辑。只需关心具体的socket处理流程
-
+```c++
 #include <iostream>
 using namespace std;
 
@@ -19,3 +19,4 @@ int main(){
 	My s;
 	s.Start();
 }
+```
