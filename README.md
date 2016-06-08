@@ -8,15 +8,15 @@ using namespace std;
 
 class My : public Listen{
 	public:
-		int Handle(int connfd){
-			char buf[2048];
-			read(connfd,buf,2048);
-			cout << buf << endl;
+		My(string host, int port):Listen(host,port){}
+
+		string & Handle(string &data){
+			return data;
 		}
 };
 
-int main(){ 
-	My s;
-	s.Start();
+int main(){
+	My l(string("127.0.0.1"), 1234);
+	l.Start();
 }
 ```

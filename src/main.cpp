@@ -12,7 +12,6 @@ class My : public Listen{
 };
 
 int main(){
-	string str("127.0.0.1");
-	My l(str, 1234);
+	My l(string("127.0.0.1"), 1234);
 	l.Start();
 }
