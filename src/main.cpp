@@ -5,14 +5,14 @@
 
 class My : public Listen{
 	public:
-		int Handle(int connfd){
-			char buf[2048];
-			read(connfd,buf,2048);
-			cout << buf << endl;
+		My(string host, int port):Listen(host,port){}
+		string & Handle(string &data){
+			return data;
 		}
 };
 
 int main(){
-	My l;
+	string str("127.0.0.1");
+	My l(str, 1234);
 	l.Start();
 }

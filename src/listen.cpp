@@ -70,7 +70,9 @@ bool Listen::Start(){
 					return -1;
 				}
 					//accept success
-				printf("connected from %s:%d\n", inet_ntoa(addr_tmp.sin_addr), addr_tmp.sin_port);
+				client_info info{addr_tmp.sin_port, string(inet_ntoa(addr_tmp.sin_addr))};
+				this->Connected(&info);
+				//printf("connected from %s:%d\n", inet_ntoa(addr_tmp.sin_addr), addr_tmp.sin_port);
 
 				client_info info_tmp;
 				info_tmp.port = addr_tmp.sin_port;
@@ -99,12 +101,17 @@ bool Listen::Start(){
 			}
 
 			// deal with logtic
-			if(this->Handle(events[n].data.fd) <0){
+			if(this->before(events[n].data.fd) <0){
+					//delete list
 				client_info client = this->client_list[events[n].data.fd];
 				this->client_list.erase(this->client_list.find(events[n].data.fd));
 
+					//delete epoll list
 				epoll_ctl(kdpfd, EPOLL_CTL_DEL, events[n].data.fd, &ev);
 				curfds--;
+
+					//callbak function
+				this->Disconnected(&client);
 			}
 		}
 	}
@@ -119,16 +126,25 @@ bool Listen::setnonblocking(int sockfd){
 	return true;
 }
 
-int Listen::Handle(int connfd){
+string & Listen::Handle(string &data){};
+
+int Listen::before(int connfd){
 	int nread=0;
-	char buf[2048];
-	nread = read(connfd,buf, 2048);
+	char buf[this->MAXBUF];
+	nread = read(connfd,buf, this->MAXBUF);
 	if(nread <= 0){
 		close(connfd);
 		return -1;
 	}
-	write(connfd, buf, nread);
+	string data(buf);
+	string result = this->Handle(data);
+		// send
+	write(connfd, result.c_str(), result.length());
 
 	return 0;
 }
+
+void Listen::Connected(const client_info *info){}
+
+void Listen::Disconnected(const client_info *info){}
 	

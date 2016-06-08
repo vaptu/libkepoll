@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include <string.h>
+
 #include <sys/epoll.h>
 #include <string>
 #include <vector>
@@ -30,7 +32,9 @@ class Listen{
 		~Listen();
 
 		bool Start();
-		virtual int Handle(int connfd);
+		virtual string & Handle(string &);
+		virtual void Connected(const client_info*);
+		virtual void Disconnected(const client_info*);
 
 	protected:
 		int MAXBUF = 2048;
@@ -43,6 +47,7 @@ class Listen{
 		map<int, client_info>	client_list;
 
 		bool setnonblocking(int sockfd);
+		int before(int connfd);
 };
 
 
