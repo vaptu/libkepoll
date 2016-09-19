@@ -1,22 +1,73 @@
-# libepoll
-libepoll使用epoll基础模型为基础。分离socket与epol具体逻辑。只需关心具体的socket处理流程
+# libkepoll
+Libkepoll use epoll model-based foundation. Separate socket and epol specific logic. Only care about the specific socket processing.
+Visit the [project's home(libkepoll)](http://kepoll.vaptu.com/) page and download the open source project
 ```c++
+#include "server_kepoll.h"
 #include <iostream>
 using namespace std;
 
-#include "listen.h"
 
-class My : public Listen{
+
+class MyServer : public ServerKEpoll{
 	public:
-		My(string host, int port):Listen(host,port){}
+	MyServer(const string addr, int port):ServerKEpoll(addr, port)
+	{
+	}
+		//standard input 
+	bool StdinHandle(int fd){
+		char buf[2048] = {0};
+		int re = read(fd, buf, 2048);
+		if(re <=0)
+			return false;
 
-		string & Handle(string &data){
-			return data;
-		}
+		buf[re] = '\0';
+		cout << "stdin : " << buf <<endl;
+		return true;
+	}
+
+		//client input 
+	bool ClientHandle(int fd){
+		char buf[2048] = {0};
+		int re = read(fd, buf, 2048);
+		if(re <=0)
+			return false;
+
+		buf[re] = '\0';
+		cout << "client : " << buf <<endl;
+		return true;
+
+	}
+		
+        //administrator input
+	bool OperaHandle(int fd){
+		char buf[2048] = {0};
+		int re = read(fd, buf, 2048);
+		if(re <=0)
+			return false;
+
+		buf[re] = '\0';
+		cout << "opera : " << buf <<endl;
+		return true;
+	}
 };
 
-int main(){
-	My l(string("127.0.0.1"), 1234);
-	l.Start();
+int main()
+{
+	MyServer server("0.0.0.0", 4455);
+    //Capture standard input
+	server.SetStdinCatch();
+    
+    //Administrator listening port
+	server.SetAdminer("0.0.0.0", 9999);
+    
+    //Multi-client port monitoring
+	server.SetListener("0.0.0.0", 4444);
+    
+    //Heartbeat packet transmission interval
+	server.SetHeartbeat(1000);
+
+	//Start the message loop
+	server.KEpoll_Loop();
 }
+
 ```
